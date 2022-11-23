@@ -1,0 +1,81 @@
+package ${package.Controller};
+
+
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import com.yly.springboot.service.${table.ServiceName};
+import com.yly.springboot.mapper.${table.MapperName};
+import com.yly.springboot.common.Result;
+import com.yly.springboot.entity.${entity};
+
+
+#if(${restControllerStyle})
+import org.springframework.web.bind.annotation.RestController;
+#else
+import org.springframework.stereotype.Controller;
+#end
+#if(${superControllerClassPackage})
+import ${superControllerClassPackage};import javax.annotation.Resource;
+#end
+
+/**
+ * <p>
+ * $!{table.comment} 前端控制器
+ * </p>
+ *
+ * @author ${author}
+ * @since ${date}
+ */
+#if(${restControllerStyle})
+@RestController
+#else
+@Controller
+#end
+@RequestMapping("#if(${package.ModuleName})/${package.ModuleName}#end/#if(${controllerMappingHyphenStyle})${controllerMappingHyphen}#else${table.entityPath}#end")
+#if(${kotlin})
+class ${table.controllerName}#if(${superControllerClass}) : ${superControllerClass}()#end
+
+#else
+#if(${superControllerClass})
+public class ${table.controllerName} extends ${superControllerClass} {
+#else
+public class ${table.controllerName} {
+#end
+    @Resource
+    ${table.ServiceName} ${table.ServiceName};
+
+    @Resource
+    ${table.MapperName} ${table.MapperName};
+
+    @GetMapping
+    public Result getAll() {
+        return Result.success(${table.ServiceName}.list());
+    }
+
+    @PostMapping("/save")
+    public Result save(@RequestBody ${entity} ${entity}) {
+        return Result.success(${table.ServiceName}.saveOrUpdate(${entity}));
+    }
+    @GetMapping("/{id}")
+    public Result info(@PathVariable String id){
+        return Result.success(${table.ServiceName}.getById(id));
+    }
+
+    @PostMapping("/delete")
+    public Result info(@RequestBody List<String> ids) {
+        return Result.success(${table.ServiceName}.removeByIds(ids));
+    }
+
+    @GetMapping("/page")
+    public Result page(Integer pageNum,Integer pageSize,String name){
+        QueryWrapper<${entity}> mySelectPageQueryWrapper=new QueryWrapper<>();
+        Page<${entity}> page = new Page<>(pageNum,pageSize);
+        if(!${entity}.equals("")){
+            mySelectPageQueryWrapper.eq("${entity}",${entity});
+        }
+        return Result.success(${table.MapperName}.selectPage(page,mySelectPageQueryWrapper));
+    }
+}
+
+#end

@@ -3,7 +3,7 @@ package com.yly.springboot.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.yly.springboot.common.Constants;
+import com.yly.springboot.common.ResultUtil;
 import com.yly.springboot.entity.Dict;
 import com.yly.springboot.entity.MenuAndId;
 import com.yly.springboot.entity.User;
@@ -52,7 +52,7 @@ public class MenuController {
     @GetMapping("/allmenusandid")
     public Result getMenusAndIds(){
         List<MenuAndId> menuAndId = MenuMapper.getMenuAndId();
-        return Result.success(menuAndId);
+        return new ResultUtil<>().setData(menuAndId);
     }
 
     @GetMapping("/allmenus")
@@ -63,7 +63,7 @@ public class MenuController {
 //        for (Menu menu: parentNode) {
 //            menu.setChildren(treeList.stream().filter(m->menu.getId().equals(m.getPid())).collect(Collectors.toList()));
 //        }
-        return Result.success(allResultMenus);
+        return new ResultUtil<>().setData(allResultMenus);
     }
 
     @GetMapping
@@ -83,21 +83,21 @@ public class MenuController {
 //        }
         List<Menu> allResultMenus = currentUserInfo.getAllResultMenus();
         menuPage.setRecords(allResultMenus);
-        return Result.success(menuPage);
+        return new ResultUtil<>().setData(menuPage);
     }
     @PostMapping("/save")
     public Result save(@RequestBody Menu menu) {
-        return Result.success(IMenuService.saveOrUpdate(menu));
+        return new ResultUtil<>().setData(IMenuService.saveOrUpdate(menu));
     }
 
     @GetMapping("/{id}")
     public Result info(@PathVariable String id){
-        return Result.success(IMenuService.getById(id));
+        return new ResultUtil<>().setData(IMenuService.getById(id));
     }
 
     @PostMapping("/delete")
     public Result info(@RequestBody List<String> ids) {
-        return Result.success(IMenuService.removeByIds(ids));
+        return new ResultUtil<>().setData(IMenuService.removeByIds(ids));
     }
 
     @GetMapping("/page")
@@ -107,15 +107,15 @@ public class MenuController {
         if(!name.equals("")){
             mySelectPageQueryWrapper.eq("name",name);
         }
-        return Result.success(MenuMapper.selectPage(page,mySelectPageQueryWrapper));
+        return new ResultUtil<>().setData(MenuMapper.selectPage(page,mySelectPageQueryWrapper));
     }
 
     @GetMapping("/icons")
     Result getIcon(){
         QueryWrapper<Dict> dictQueryWrapper = new QueryWrapper<>();
-        dictQueryWrapper.eq("type", Constants.Dict_TYPE_ICON);
+        dictQueryWrapper.eq("type", "");
 
-        return Result.success(dictMapper.selectList(dictQueryWrapper));
+        return new ResultUtil<>().setData(dictMapper.selectList(dictQueryWrapper));
     }
 }
 

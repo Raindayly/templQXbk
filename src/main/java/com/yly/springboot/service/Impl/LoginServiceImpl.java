@@ -5,7 +5,7 @@ import cn.hutool.log.Log;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yly.springboot.Utils.TokenUtil;
-import com.yly.springboot.common.Constants;
+import com.yly.springboot.common.Result_Code;
 import com.yly.springboot.entity.Menu;
 import com.yly.springboot.entity.RoleMenuRelation;
 import com.yly.springboot.entity.User;
@@ -51,21 +51,16 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
             String role = result.getRole();
             String roleid = roleMapper.selectIdByRole(role);
             userDTO.setToken(token);
-            //获取某个角色对应的菜单集合
-//            List<String> menuIds = roleMenuRelationMapper.selectMenusByRoleId(roleid);
-//            //获取menus
-//            List<Menu> menuslist = iMenuService.list();
-//            List<Menu> parentNode = menuslist.stream().filter(menu -> menu.getPid() == null).collect(Collectors.toList());
-//            for (Menu menu: parentNode) {
-//                menu.setChildren(menuslist.stream().filter(m->menu.getId().equals(m.getPid())).collect(Collectors.toList()));
-//            }
 
             userDTO.setMenus(currentUserInfo.getCurrentMenus());
             BeanUtil.copyProperties(result, userDTO, true);
             return userDTO;
         } else {
-            throw new ServiceException(Constants.CODE_600, "用户名或密码错误");
+            return null;
+//            throw new ServiceException(Result_Code.CODE_600.getCode(), "用户名或密码错误");
         }
+
+
 
     }
 
@@ -81,7 +76,7 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
             return login(userDTO);
 
         } else {
-            throw new ServiceException(Constants.CODE_600, "用户已注册");
+            throw new ServiceException(Result_Code.CODE_500.getCode(), "用户已注册");
 
         }
 
@@ -93,20 +88,21 @@ public class LoginServiceImpl extends ServiceImpl<UserMapper, User> implements L
         User result = getUserInfo(userDTO);
         String token = null;
         if (result != null) {
-            token = TokenUtil.genToken(result.getId(), result.getPassword());}
+            token = TokenUtil.genToken(result.getId(), result.getPassword());
+        }
         return token;
     }
 
     private User getUserInfo(UserDTO userDTO) {
         QueryWrapper<User> objectQueryWrapper = new QueryWrapper<>();
-        objectQueryWrapper.eq("username", userDTO.getUsername());
+        objectQueryWrapper.eq("username", userDTO.getUserName());
         objectQueryWrapper.eq("password", userDTO.getPassword());
         User result;
         try {
             result = getOne(objectQueryWrapper);
             return result;
         } catch (Exception e) {
-            throw new ServiceException(Constants.CODE_500, "系统错误");
+            throw new ServiceException(Result_Code.CODE_500.getCode(),e.toString());
         }
     }
 

@@ -6,8 +6,9 @@ import cn.hutool.poi.excel.ExcelWriter;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.yly.springboot.Utils.TokenUtil;
-import com.yly.springboot.common.Constants;
 import com.yly.springboot.common.Result;
+import com.yly.springboot.common.ResultUtil;
+import com.yly.springboot.common.Result_Code;
 import com.yly.springboot.entity.User;
 import com.yly.springboot.mapper.UserMapper;
 import com.yly.springboot.service.CurrentUserInfo;
@@ -38,7 +39,7 @@ public class UserController {
 
     @GetMapping
     public Result getUser() {
-        return Result.success(userService.list());
+        return new ResultUtil<>().setData(userService.list());
     }
 
 
@@ -57,26 +58,26 @@ public class UserController {
         }
 
         Page<User> page = new Page<>(pageNum,pageSize);
-        return Result.success(userMapper.selectPage(page,mySelectPageQueryWrapper));
+        return new ResultUtil<>().setData(userMapper.selectPage(page,mySelectPageQueryWrapper));
     }
 
     @PostMapping("/save")
     public Result save(@RequestBody User user) {
 
-        return Result.success(userService.saveOrUpdate(user));
+        return new ResultUtil<>().setData(userService.saveOrUpdate(user));
     }
     @GetMapping("/info")
     public Result info(@RequestParam("id")String id) {
 
-        return Result.success(userService.getById(id));
+        return new ResultUtil<>().setData(userService.getById(id));
     }
 
     @PostMapping("/delete")
     public Result info(@RequestBody List<String> ids) {
         if(userService.removeByIds(ids)){
-            return Result.success();
+            return new ResultUtil<>().setSuccessMsg(Result_Code.CODE_200.getMsg());
         }else{
-            return Result.error(Constants.CODE_600,"删除失败,请确定参数正确");
+            return new ResultUtil<>().setData(Result_Code.CODE_600.getCode(),"删除失败,请确定参数正确");
         }
     }
     @GetMapping("/export")
@@ -94,7 +95,7 @@ public class UserController {
         writer.flush(outputStream);
         writer.close();
         outputStream.close();
-        return Result.success();
+        return new ResultUtil<>().setSuccessMsg(Result_Code.CODE_200.getMsg());
     }
     @PostMapping("/import")
     public Result imp(MultipartFile file) throws Exception{
@@ -103,18 +104,18 @@ public class UserController {
 
         List<User> list = reader.readAll(User.class);
 
-        return Result.success(userService.saveOrUpdateBatch(list));
+        return new ResultUtil<>().setData(userService.saveOrUpdateBatch(list));
     }
     @GetMapping("/username/{username}")
     public Result userInfoByName(@PathVariable String username) {
         QueryWrapper<User> objectQueryWrapper = new QueryWrapper<>();
         objectQueryWrapper.eq("username", username);
         User one = userService.getOne(objectQueryWrapper);
-        return Result.success(one);
+        return new ResultUtil<>().setData(one);
     }
     @GetMapping("/userinfo")
     public Result selectUserInfo() {
-        return Result.success(TokenUtil.getCurrentUser());
+        return new ResultUtil<>().setData(TokenUtil.getCurrentUser());
     }
 
     @GetMapping("/save_role")
@@ -122,7 +123,7 @@ public class UserController {
         User user = userService.getById(id);
         user.setRole(role);
         userService.updateById(user);
-        return Result.success();
+        return new ResultUtil().setSuccessMsg(Result_Code.CODE_200.getMsg());
     }
 
 }

@@ -7,8 +7,9 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.yly.springboot.common.Constants;
 import com.yly.springboot.common.Result;
+import com.yly.springboot.common.ResultUtil;
+import com.yly.springboot.common.Result_Code;
 import com.yly.springboot.entity.Files;
 import com.yly.springboot.exception.ServiceException;
 import com.yly.springboot.mapper.FileMapper;
@@ -52,14 +53,11 @@ public class FileController {
     public String upload(@RequestParam("file") MultipartFile file,HttpServletResponse rep) throws IOException {
 
 
-        rep.setContentType("");
+//        rep.setContentType();
         String originalFilename = file.getOriginalFilename();
         String type = FileUtil.extName(originalFilename);
         long size = file.getSize();
 
-        /**
-         * 创建一个文件
-         */
         File uploadParentFile = new File(fileUploadPath);
         if (!uploadParentFile.exists()) {
             uploadParentFile.mkdir();
@@ -157,13 +155,13 @@ public class FileController {
         }
         Page<Files> objectPage = new Page<>(pageNum, pageSize);
 
-        return Result.success(fileMapper.selectPage(objectPage, userQueryWrapper));
+        return new ResultUtil<>().setData(fileMapper.selectPage(objectPage, userQueryWrapper));
     }
 
     @PostMapping("/delete")
     public Result info(@RequestBody List<String> ids) {
         fileService.deleteIds(ids);
-        return Result.success();
+        return new ResultUtil<>().setSuccessMsg(Result_Code.CODE_200.getMsg());
     }
 
 

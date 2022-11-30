@@ -2,8 +2,9 @@ package com.yly.springboot.controller;
 
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.yly.springboot.common.Constants;
 import com.yly.springboot.common.Result;
+import com.yly.springboot.common.ResultUtil;
+import com.yly.springboot.common.Result_Code;
 import com.yly.springboot.entity.User;
 import com.yly.springboot.entity.UserDTO;
 import com.yly.springboot.service.LoginService;
@@ -24,10 +25,9 @@ public class RegisterController {
     public Result register(@RequestBody UserDTO userDTO){
         try {
             UserDTO data = loginService.register(userDTO);
-            return Result.success(data);
-
+            return new ResultUtil<>().setData(data);
         }catch (Exception e){
-            return Result.error(Constants.CODE_600,e.getMessage());
+            return new ResultUtil<>().setData(Result_Code.CODE_600.getCode(),e.getMessage());
         }
 
     }

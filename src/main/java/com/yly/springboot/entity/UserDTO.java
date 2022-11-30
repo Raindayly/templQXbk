@@ -10,8 +10,8 @@ import java.util.List;
 @Data
 @TableName("sys_user")
 public class UserDTO {
-    private String username;
-    private String nickname;
+    private String userName;
+    private String nickName;
     private String password;
     private String token;
     private String avatarUrl;

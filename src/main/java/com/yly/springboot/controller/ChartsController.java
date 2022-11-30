@@ -4,8 +4,9 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.date.Quarter;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.yly.springboot.common.Constants;
 import com.yly.springboot.common.Result;
+import com.yly.springboot.common.ResultUtil;
+import com.yly.springboot.common.Result_Code;
 import com.yly.springboot.entity.User;
 import com.yly.springboot.entity.UserDTO;
 import com.yly.springboot.exception.ServiceException;
@@ -34,7 +35,7 @@ public class ChartsController {
         try {
             userList = userService.list();
         } catch (Exception e) {
-            throw new ServiceException(Constants.CODE_600, "用户信息丢失,请联系管理员");
+            throw new ServiceException(Result_Code.CODE_600.getCode(), "用户信息丢失,请联系管理员");
         }
         HashMap<String, Integer> userInfoMap = new HashMap<>();
         int q1 = 0;
@@ -61,7 +62,7 @@ public class ChartsController {
         userInfoMap.put("q2", q2);
         userInfoMap.put("q3", q3);
         userInfoMap.put("q4", q4);
-        return Result.success(userInfoMap);
+        return new ResultUtil<>().setData(userInfoMap);
     }
 
     @GetMapping("/recently")
@@ -81,6 +82,6 @@ public class ChartsController {
         }
         stringListHashMap.put("xData",xAxisDataList);
         stringListHashMap.put("yData",hebdomadUserDataNum);
-        return Result.success(stringListHashMap);
+        return new ResultUtil<>().setData(stringListHashMap);
     }
 }

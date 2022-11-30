@@ -4,33 +4,14 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateUtil;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.yly.springboot.common.Result;
-import com.yly.springboot.entity.Menu;
-import com.yly.springboot.entity.RoleMenuRelation;
-import com.yly.springboot.entity.User;
 import com.yly.springboot.entity.UserDTO;
 import com.yly.springboot.exception.ServiceException;
-import com.yly.springboot.mapper.RoleMapper;
-import com.yly.springboot.mapper.RoleMenuRelationMapper;
 import com.yly.springboot.service.CurrentUserInfo;
-import com.yly.springboot.service.IMenuService;
-import com.yly.springboot.service.UserService;
-import org.apache.poi.hssf.record.DVALRecord;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Component
 public class TokenUtil  {

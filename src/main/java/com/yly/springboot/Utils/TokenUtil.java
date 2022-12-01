@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.date.DateUtil;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.yly.springboot.common.Result_Code;
 import com.yly.springboot.entity.UserDTO;
 import com.yly.springboot.exception.ServiceException;
 import com.yly.springboot.service.CurrentUserInfo;
@@ -42,7 +43,7 @@ public class TokenUtil  {
             BeanUtil.copyProperties(staticCurrentUserInfo.getUser(), userDTO, true);
             return userDTO;
         }catch (Exception e){
-            throw new ServiceException("500",e.getMessage());
+            throw new ServiceException(Result_Code.CODE_500.getCode(), e.getMessage());
         }
     }
 

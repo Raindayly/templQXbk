@@ -3,29 +3,19 @@ package com.yly.springboot.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.yly.springboot.common.Result;
 import com.yly.springboot.common.ResultUtil;
 import com.yly.springboot.entity.Dict;
-import com.yly.springboot.entity.MenuAndId;
-import com.yly.springboot.entity.User;
-import com.yly.springboot.mapper.DictMapper;
-import com.yly.springboot.service.CurrentUserInfo;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.*;
-import com.yly.springboot.service.IMenuService;
-import com.yly.springboot.mapper.MenuMapper;
-import com.yly.springboot.common.Result;
 import com.yly.springboot.entity.Menu;
-
-
-
-import org.springframework.web.bind.annotation.RestController;
+import com.yly.springboot.entity.MenuAndId;
+import com.yly.springboot.mapper.DictMapper;
+import com.yly.springboot.mapper.MenuMapper;
+import com.yly.springboot.service.CurrentUserInfo;
+import com.yly.springboot.service.IMenuService;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * <p>

@@ -28,18 +28,18 @@ public class LoginController {
         String password = userDTO.getPassword();
 
         if(StrUtil.isBlank(username) || StrUtil.isBlank(password)){
-            return new ResultUtil<>().setSuccessMsg(Result_Code.CODE_603.getMsg());
+            return new ResultUtil<>().setErrorMsg(Result_Code.CODE_603.getMsg());
         }
 
         //判断用户是否存在
         if(!userService.isUserHas(username)){
-            return new ResultUtil<>().setSuccessMsg(Result_Code.CODE_602.getMsg());
+            return new ResultUtil<>().setErrorMsg(Result_Code.CODE_602.getMsg());
         }
 
         String token = loginService.getToken(userDTO);
 
         if(token == null){
-            return new ResultUtil<>().setSuccessMsg(Result_Code.CODE_601.getMsg());
+            return new ResultUtil<>().setErrorMsg(Result_Code.CODE_601.getMsg());
         }
 
         return new ResultUtil<>().setData(token);

@@ -18,6 +18,7 @@ import com.yly.springboot.common.Result;
 import com.yly.springboot.entity.Menu;
 
 
+
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -50,24 +51,20 @@ public class MenuController {
     @Resource
     DictMapper dictMapper;
     @GetMapping("/allmenusandid")
-    public Result getMenusAndIds(){
+    public Result<Object> getMenusAndIds(){
         List<MenuAndId> menuAndId = MenuMapper.getMenuAndId();
         return new ResultUtil<>().setData(menuAndId);
     }
 
+
     @GetMapping("/allmenus")
-    public Result getTree() {
+    public Result<Object> getTree() {
         List<Menu> allResultMenus = currentUserInfo.getAllResultMenus();
-//        List<Menu> treeList = IMenuService.list();
-//        List<Menu> parentNode = treeList.stream().filter(menu -> menu.getPid() == null).collect(Collectors.toList());
-//        for (Menu menu: parentNode) {
-//            menu.setChildren(treeList.stream().filter(m->menu.getId().equals(m.getPid())).collect(Collectors.toList()));
-//        }
         return new ResultUtil<>().setData(allResultMenus);
     }
 
     @GetMapping
-    public Result getAll(Integer pageNum,Integer pageSize,@RequestParam String name) {
+    public Result<Object> getAll(Integer pageNum, Integer pageSize, @RequestParam String name) {
         QueryWrapper<Menu> mySelectPageQueryWrapper=new QueryWrapper<>();
         if(!name.equals("")){
             mySelectPageQueryWrapper.eq("name",name);
@@ -75,33 +72,27 @@ public class MenuController {
         mySelectPageQueryWrapper.isNull("pid");
         Page<Menu> page = new Page<>(pageNum,pageSize);
         Page<Menu> menuPage = MenuMapper.selectPage(page, mySelectPageQueryWrapper);
-//        List<Menu> list = IMenuService.list();
-//        List<Menu> parentNode = list.stream().filter(menu -> menu.getPid() == null).collect(Collectors.toList());
-//
-//        for (Menu menu: parentNode) {
-//                menu.setChildren(list.stream().filter(m->menu.getId().equals(m.getPid())).collect(Collectors.toList()));
-//        }
         List<Menu> allResultMenus = currentUserInfo.getAllResultMenus();
         menuPage.setRecords(allResultMenus);
         return new ResultUtil<>().setData(menuPage);
     }
     @PostMapping("/save")
-    public Result save(@RequestBody Menu menu) {
+    public Result<Object> save(@RequestBody Menu menu) {
         return new ResultUtil<>().setData(IMenuService.saveOrUpdate(menu));
     }
 
     @GetMapping("/{id}")
-    public Result info(@PathVariable String id){
+    public Result<Object> info(@PathVariable String id){
         return new ResultUtil<>().setData(IMenuService.getById(id));
     }
 
     @PostMapping("/delete")
-    public Result info(@RequestBody List<String> ids) {
+    public Result<Object> info(@RequestBody List<String> ids) {
         return new ResultUtil<>().setData(IMenuService.removeByIds(ids));
     }
 
     @GetMapping("/page")
-    public Result page(Integer pageNum,Integer pageSize,@RequestParam String name){
+    public Result<Object> page(Integer pageNum, Integer pageSize, @RequestParam String name){
         QueryWrapper<Menu> mySelectPageQueryWrapper=new QueryWrapper<>();
         Page<Menu> page = new Page<>(pageNum,pageSize);
         if(!name.equals("")){
@@ -111,10 +102,9 @@ public class MenuController {
     }
 
     @GetMapping("/icons")
-    Result getIcon(){
+    Result<Object> getIcon(){
         QueryWrapper<Dict> dictQueryWrapper = new QueryWrapper<>();
         dictQueryWrapper.eq("type", "");
-
         return new ResultUtil<>().setData(dictMapper.selectList(dictQueryWrapper));
     }
 }

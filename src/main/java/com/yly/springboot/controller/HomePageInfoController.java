@@ -1,6 +1,7 @@
 package com.yly.springboot.controller;
 
 import com.yly.springboot.common.Result;
+import com.yly.springboot.common.ResultUtil;
 import com.yly.springboot.mapper.FileMapper;
 import com.yly.springboot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,6 @@ public class HomePageInfoController {
 //        stringIntegerHashMap.put("todayLoginedUserNum")
         stringIntegerHashMap.put("allFileNum",aLong);
 
-        return Result.success(stringIntegerHashMap);
+        return new ResultUtil<>().setData(stringIntegerHashMap);
     }
 }
